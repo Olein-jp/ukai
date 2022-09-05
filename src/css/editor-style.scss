@@ -1,0 +1,5 @@
+@use "mixin";
+
+.editor-styles-wrapper {
+  @include mixin.share-styles();
+}
