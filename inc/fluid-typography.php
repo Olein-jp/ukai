@@ -69,20 +69,20 @@ if ( ! function_exists( 'ukai_generate_fluid_font_preset' ) ) {
 
 		$fluid_font_size_preset = [];
 		$size_labels            = [
-			'S',
-			'M',
-			'L',
-			'XL',
-			'2XL',
-			'3XL',
-			'4XL',
-			'5XL',
-			'6XL',
-			'7XL',
-			'8XL',
-			'9XL',
-			'10XL',
-			'11XL'
+			's',
+			'm',
+			'l',
+			'xl',
+			'2xl',
+			'3xl',
+			'4xl',
+			'5xl',
+			'6xl',
+			'7xl',
+			'8xl',
+			'9xl',
+			'10xl',
+			'11xl'
 		];
 		$size_labels            = array_slice( $size_labels, 0, $fluid_typography_before_default + 1 + $fluid_typography_after_default );
 
@@ -118,7 +118,7 @@ if ( ! function_exists( 'ukai_add_font_size_preset' ) ) {
 		$new_font_sizes = [];
 
 		foreach ( $font_presets as $key => $value ) {
-			$label            = strval( ( $key >= 0 ) ? $key : '-' . abs( $key ) );
+			$label            = $key;
 			$new_font_sizes[] = array(
 				'size' => $value,
 				'name' => strtoupper( $label ),

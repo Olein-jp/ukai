@@ -59,7 +59,7 @@ if ( ! function_exists( 'ukai_generate_fluid_spacing' ) ) {
 		$fluid_spacing_min           = [];
 		$fluid_spacing_max           = [];
 		$fluid_spacing_preset        = [];
-		$fluid_spacing_preset_labels = [ 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL' ];
+		$fluid_spacing_preset_labels = [ 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl' ];
 
 		for ( $i = 1; $i <= $fluid_spacing_steps; $i ++ ) {
 			$label = $fluid_spacing_preset_labels[ $i - 1 ];
@@ -68,13 +68,12 @@ if ( ! function_exists( 'ukai_generate_fluid_spacing' ) ) {
 				$fluid_spacing_max[ $label ] = ( $fluid_spacing_base_size * $i ) * $fluid_spacing_ratio;
 			} elseif ( is_numeric( $fluid_spacing_multiple ) ) {
 				if ( $i > 1 ) {
-					$previous_label              = $fluid_spacing_preset_labels[ $i - 2 ]; // Adjust index to access the previous element
+					$previous_label              = $fluid_spacing_preset_labels[ $i - 2 ];
 					$fluid_spacing_min[ $label ] = $fluid_spacing_min[ $previous_label ] * $fluid_spacing_multiple;
 					$fluid_spacing_max[ $label ] = $fluid_spacing_min[ $label ] * $fluid_spacing_ratio;
 				} else {
-					// Handle the case for the first element differently if needed
-					$fluid_spacing_min[ $label ] = $fluid_spacing_base_size; // or some other initial value
-					$fluid_spacing_max[ $label ] = $fluid_spacing_base_size * $fluid_spacing_ratio; // or some other initial value
+					$fluid_spacing_min[ $label ] = $fluid_spacing_base_size;
+					$fluid_spacing_max[ $label ] = $fluid_spacing_base_size * $fluid_spacing_ratio;
 				}
 			}
 
@@ -107,7 +106,7 @@ if ( ! function_exists( 'ukai_add_spacing_preset' ) ) {
 		$new_spacings = [];
 
 		foreach ( $font_presets as $key => $value ) {
-			$label          = strval( ( $key >= 0 ) ? $key : '-' . abs( $key ) );
+			$label          = $key;
 			$new_spacings[] = array(
 				'size' => $value,
 				'name' => strtoupper( $label ),
