@@ -10,7 +10,8 @@
 		},
 		"spacing": {
 			"units": [ "%", "px", "em", "rem", "vh", "vw" ],
-			"defaultSpacingSizes": false
+			"defaultSpacingSizes": false,
+			"blockGap": true
 		},
 		"typography": {
 			"fontFamilies": [
@@ -40,6 +41,17 @@
 					"slug": "primary"
 				}
 			]
+		}
+	},
+	"styles": {
+		"spacing": {
+			"blockGap": "var( --wp--preset--spacing--m )",
+			"padding": {
+				"top": "0",
+				"right": "var( --wp--preset--spacing--s )",
+				"bottom": "0",
+				"left": "var( --wp--preset--spacing--s )"
+			}
 		}
 	},
 	"templateParts": [
