@@ -19,7 +19,8 @@
 					"name": "System Font",
 					"slug": "system-font"
 				}
-			]
+			],
+			"defaultFontSizes": false
 		},
 		"color": {
 			"palette": [

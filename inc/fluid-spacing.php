@@ -32,21 +32,51 @@ if ( ! function_exists( 'ukai_generate_fluid_spacing' ) ) {
 		 * - Minor Seventh: 1.778
 		 * - Major Seventh: 1.875
 		 */
-		$fluid_spacing_ratio              = apply_filters( 'ukai_fluid_spacing_ratio', 1.25 );
-		$fluid_spacing_base_size          = apply_filters( 'ukai_fluid_spacing_base_size', 0.625 );
+		$fluid_spacing_ratio = apply_filters( 'ukai_fluid_spacing_ratio', 1.25 );
+		/**
+		 * [base size] Baseline spacing value
+		 * Default : 0.625 (10px)(float)
+		 */
+		$fluid_spacing_base_size = apply_filters( 'ukai_fluid_spacing_base_size', 0.625 );
+		/**
+		 * [viewport width] Minimum and maximum viewport width. To make changes from the base, please use hooks to the constants.
+		 */
 		$fluid_spacing_min_viewport_width = apply_filters( 'ukai_fluid_spacing_min_viewport_width', UKAI_MIN_VIEWPORT_WIDTH );
 		$fluid_spacing_max_viewport_width = apply_filters( 'ukai_fluid_spacing_max_viewport_width', UKAI_MAX_VIEWPORT_WIDTH );
-		$fluid_spacing_steps              = min( apply_filters( 'ukai_fluid_spacing_after_default', 6 ), 10 );
+		/**
+		 * [steps] Number of steps to generate. The default is 6, with a maximum of 10.
+		 */
+		$fluid_spacing_steps = min( apply_filters( 'ukai_fluid_spacing_after_default', 8 ), 10 );
+		/**
+		 * [multiple samples] Multiple values to generate the next value.
+		 * Default : 'double_repeatedly'(string))
+		 * - double_repeatedly: 1, 2, 4, 8, 16, 32, 64, 128, 256, 512
+		 * You can also use a numeric value to multiply the previous value.
+		 * - 1.25: 1, 1.25, 1.5625, 1.953125, 2.44140625
+		 */
+		$fluid_spacing_multiple = apply_filters( 'ukai_fluid_spacing_multiple', 'double_repeatedly' );
 
 		$fluid_spacing_min           = [];
 		$fluid_spacing_max           = [];
 		$fluid_spacing_preset        = [];
 		$fluid_spacing_preset_labels = [ 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL' ];
 
-		for ( $i = 1; $i <= $fluid_spacing_steps; $i++ ) {
-			$label                       = $fluid_spacing_preset_labels[ $i - 1 ];
-			$fluid_spacing_min[ $label ] = $fluid_spacing_base_size * $i;
-			$fluid_spacing_max[ $label ] = ( $fluid_spacing_base_size * $i ) * $fluid_spacing_ratio;
+		for ( $i = 1; $i <= $fluid_spacing_steps; $i ++ ) {
+			$label = $fluid_spacing_preset_labels[ $i - 1 ];
+			if ( 'double_repeatedly' === $fluid_spacing_multiple ) {
+				$fluid_spacing_min[ $label ] = $fluid_spacing_base_size * $i;
+				$fluid_spacing_max[ $label ] = ( $fluid_spacing_base_size * $i ) * $fluid_spacing_ratio;
+			} elseif ( is_numeric( $fluid_spacing_multiple ) ) {
+				if ( $i > 1 ) {
+					$previous_label              = $fluid_spacing_preset_labels[ $i - 2 ]; // Adjust index to access the previous element
+					$fluid_spacing_min[ $label ] = $fluid_spacing_min[ $previous_label ] * $fluid_spacing_multiple;
+					$fluid_spacing_max[ $label ] = $fluid_spacing_min[ $label ] * $fluid_spacing_ratio;
+				} else {
+					// Handle the case for the first element differently if needed
+					$fluid_spacing_min[ $label ] = $fluid_spacing_base_size; // or some other initial value
+					$fluid_spacing_max[ $label ] = $fluid_spacing_base_size * $fluid_spacing_ratio; // or some other initial value
+				}
+			}
 
 			$slope = ( $fluid_spacing_max[ $label ] - $fluid_spacing_min[ $label ] ) / ( $fluid_spacing_max_viewport_width - $fluid_spacing_min_viewport_width );
 
@@ -68,6 +98,7 @@ if ( ! function_exists( 'ukai_add_spacing_preset' ) ) {
 	 * Add spacing preset to theme.json
 	 *
 	 * @param WP_Theme_JSON $theme_json Theme JSON object.
+	 *
 	 * @return WP_Theme_JSON
 	 */
 	function ukai_add_spacing_preset( $theme_json ) {

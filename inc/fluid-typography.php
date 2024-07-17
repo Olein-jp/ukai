@@ -15,7 +15,7 @@ if ( ! function_exists( 'ukai_generate_fluid_font_preset' ) ) {
 	 */
 	function ukai_generate_fluid_font_preset() {
 		/**
-		 * [harmonic sequence samples]
+		 * [harmonic sequence samples] This specifies the ratio used for the minimum and maximum font sizes.
 		 * - Pythagorean Comma: 1.0136
 		 * - Minor Second: 1.067
 		 * - Major Second:  1.125
@@ -32,14 +32,24 @@ if ( ! function_exists( 'ukai_generate_fluid_font_preset' ) ) {
 		 * - Minor Seventh: 1.778
 		 * - Major Seventh: 1.875
 		 */
-		$fluid_typography_min_ratio          = apply_filters( 'ukai_fluid_typography_min_ratio', 1.155 );
-		$fluid_typography_max_ratio          = apply_filters( 'ukai_fluid_typography_max_ratio', 1.2 );
-		$fluid_typography_min_base           = apply_filters( 'ukai_fluid_typography_min_base', 1 );
-		$fluid_typography_max_base           = apply_filters( 'ukai_fluid_typography_max_base', 1.25 );
+		$fluid_typography_min_ratio = apply_filters( 'ukai_fluid_typography_min_ratio', 1.155 );
+		$fluid_typography_max_ratio = apply_filters( 'ukai_fluid_typography_max_ratio', 1.2 );
+		/**
+		 * [base size] Baseline font size value
+		 */
+		$fluid_typography_min_base = apply_filters( 'ukai_fluid_typography_min_base', 1 );
+		$fluid_typography_max_base = apply_filters( 'ukai_fluid_typography_max_base', 1.25 );
+		/**
+		 * The minimum font size is maintained for viewport widths equal to or less than $fluid_typography_min_viewport_width.
+		 * The maximum font size is maintained for viewport widths equal to or greater than $fluid_typography_max_viewport_width.
+		 */
 		$fluid_typography_min_viewport_width = apply_filters( 'ukai_fluid_typography_min_viewport_width', UKAI_MIN_VIEWPORT_WIDTH );
 		$fluid_typography_max_viewport_width = apply_filters( 'ukai_fluid_typography_max_viewport_width', UKAI_MAX_VIEWPORT_WIDTH );
-		$fluid_typography_before_default     = min( apply_filters( 'ukai_fluid_typography_before_default', 3 ), 3 );
-		$fluid_typography_after_default      = min( apply_filters( 'ukai_fluid_typography_after_default', 10 ), 10 );
+		/**
+		 * Specify how many sizes to generate below and above the baseline font size.
+		 */
+		$fluid_typography_before_default = min( apply_filters( 'ukai_fluid_typography_before_default', 3 ), 3 );
+		$fluid_typography_after_default  = min( apply_filters( 'ukai_fluid_typography_after_default', 10 ), 10 );
 
 		$min_font_size = [];
 		$max_font_size = [];
@@ -58,7 +68,22 @@ if ( ! function_exists( 'ukai_generate_fluid_font_preset' ) ) {
 		}
 
 		$fluid_font_size_preset = [];
-		$size_labels            = [ 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL', '10XL', '11XL' ];
+		$size_labels            = [
+			'S',
+			'M',
+			'L',
+			'XL',
+			'2XL',
+			'3XL',
+			'4XL',
+			'5XL',
+			'6XL',
+			'7XL',
+			'8XL',
+			'9XL',
+			'10XL',
+			'11XL'
+		];
 		$size_labels            = array_slice( $size_labels, 0, $fluid_typography_before_default + 1 + $fluid_typography_after_default );
 
 		foreach ( $min_font_size as $index => $min_size ) {
@@ -84,6 +109,7 @@ if ( ! function_exists( 'ukai_add_font_size_preset' ) ) {
 	 * Add font size preset to theme.json
 	 *
 	 * @param WP_Theme_JSON $theme_json Theme JSON object.
+	 *
 	 * @return WP_Theme_JSON
 	 */
 	function ukai_add_font_size_preset( $theme_json ) {
