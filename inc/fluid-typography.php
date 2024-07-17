@@ -9,42 +9,57 @@
 
 if ( ! function_exists( 'ukai_generate_fluid_font_preset' ) ) {
 	/**
-	 * Generate fluid font size preset
+	 * Generate fluid font size preset and clump formula
 	 *
 	 * @return array
 	 */
 	function ukai_generate_fluid_font_preset() {
-		$min_font_size_ratio = apply_filters( 'ukai_fluid_font_min_font_size_ratio', 1.1 );
-		$max_font_size_ratio = apply_filters( 'ukai_fluid_font_max_font_size_ratio', 1.2 );
-		$min_base_font_size  = apply_filters( 'ukai_fluid_font_min_base_size', 1 );
-		$max_base_font_size  = apply_filters( 'ukai_fluid_font_max_base_size', 1.25 );
-		$min_viewport_width  = apply_filters( 'ukai_fluid_font_min_viewport_width', 25 ); // 25
-		$max_viewport_width  = apply_filters( 'ukai_fluid_font_max_viewport_width', 98.75 ); // 98.75
-		$font_step_below     = min( apply_filters( 'ukai_fluid_font_step_below', 2 ), 3 );
-		$font_step_above     = max( apply_filters( 'ukai_fluid_font_step_above', 8 ), 10 );
+		/**
+		 * [harmonic sequence samples]
+		 * - Pythagorean Comma: 1.0136
+		 * - Minor Second: 1.067
+		 * - Major Second:  1.125
+		 * - Napoleon Ratio: 1.155
+		 * - Minor Third: 1.2
+		 * - Major Third: 1.25
+		 * - Perfect Fourth: 1.333
+		 * - Augmented Fourth: 1.406
+		 * - Augmented Fourth: 1.406
+		 * - Perfect Fifth: 1.5
+		 * - Minor Sixth: 1.6
+		 * - Golden Ratio: 1.618
+		 * - Major Sixth: 1.667
+		 * - Minor Seventh: 1.778
+		 * - Major Seventh: 1.875
+		 */
+		$fluid_typography_min_ratio          = apply_filters( 'ukai_fluid_typography_min_ratio', 1.155 );
+		$fluid_typography_max_ratio          = apply_filters( 'ukai_fluid_typography_max_ratio', 1.2 );
+		$fluid_typography_min_base           = apply_filters( 'ukai_fluid_typography_min_base', 1 );
+		$fluid_typography_max_base           = apply_filters( 'ukai_fluid_typography_max_base', 1.25 );
+		$fluid_typography_min_viewport_width = apply_filters( 'ukai_fluid_typography_min_viewport_width', UKAI_MIN_VIEWPORT_WIDTH );
+		$fluid_typography_max_viewport_width = apply_filters( 'ukai_fluid_typography_max_viewport_width', UKAI_MAX_VIEWPORT_WIDTH );
+		$fluid_typography_before_default     = min( apply_filters( 'ukai_fluid_typography_before_default', 3 ), 3 );
+		$fluid_typography_after_default      = min( apply_filters( 'ukai_fluid_typography_after_default', 10 ), 10 );
 
 		$min_font_size = [];
 		$max_font_size = [];
 
-		for ( $i = $font_step_below; $i >= 1; $i-- ) {
-			$min_font_size[] = $min_base_font_size / pow( $min_font_size_ratio, $i );
-			$max_font_size[] = $max_base_font_size / pow( $max_font_size_ratio, $i );
+		for ( $i = $fluid_typography_before_default; $i >= 1; $i -- ) {
+			$min_font_size[] = $fluid_typography_min_base / pow( $fluid_typography_min_ratio, $i );
+			$max_font_size[] = $fluid_typography_max_ratio / pow( $fluid_typography_max_ratio, $i );
 		}
 
-		$min_font_size[] = $min_base_font_size;
-		$max_font_size[] = $max_base_font_size;
+		$min_font_size[] = $fluid_typography_min_base;
+		$max_font_size[] = $fluid_typography_max_base;
 
-		for ( $i = 1; $i <= $font_step_above; $i++ ) {
-			$min_font_size[] = $min_base_font_size * pow( $min_font_size_ratio, $i );
-			$max_font_size[] = $max_base_font_size * pow( $max_font_size_ratio, $i );
+		for ( $i = 1; $i <= $fluid_typography_after_default; $i ++ ) {
+			$min_font_size[] = $fluid_typography_min_base * pow( $fluid_typography_min_ratio, $i );
+			$max_font_size[] = $fluid_typography_max_base * pow( $fluid_typography_max_ratio, $i );
 		}
 
 		$fluid_font_size_preset = [];
-		$size_labels_below      = array( 's', 'xs', '2xZs' );
-		$size_labels_above      = array( 'l', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl' );
-		$size_labels_below      = array_reverse( array_slice( $size_labels_below, 0, $font_step_below ) );
-		$size_labels_above      = array_slice( $size_labels_above, 0, $font_step_above );
-		$size_labels            = array_merge( $size_labels_below, array( 'm' ), $size_labels_above );
+		$size_labels            = [ 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL', '9XL', '10XL', '11XL' ];
+		$size_labels            = array_slice( $size_labels, 0, $fluid_typography_before_default + 1 + $fluid_typography_after_default );
 
 		foreach ( $min_font_size as $index => $min_size ) {
 			if ( ! isset( $size_labels[ $index ] ) ) {
@@ -52,14 +67,15 @@ if ( ! function_exists( 'ukai_generate_fluid_font_preset' ) ) {
 			}
 			$max_size = $max_font_size[ $index ];
 
-			$slope = ( $max_size - $min_size ) / ( $max_viewport_width - $min_viewport_width );
+			$slope = ( $max_size - $min_size ) / ( $fluid_typography_max_viewport_width - $fluid_typography_min_viewport_width );
 
-			$y_intersection = ( -1 * $min_viewport_width ) * $slope + $min_size;
+			$y_intersection = ( - 1 * $fluid_typography_min_viewport_width ) * $slope + $min_size;
 
 			$fluid_font_size_preset[ $size_labels[ $index ] ] = 'clamp( ' . round( $min_size, 4 ) . 'rem, ' . round( $y_intersection, 4 ) . 'rem + ' . ( round( $slope, 6 ) * 100 ) . 'vw, ' . round( $max_size, 4 ) . 'rem )';
 		}
 
 		return $fluid_font_size_preset;
+
 	}
 }
 
@@ -85,7 +101,7 @@ if ( ! function_exists( 'ukai_add_font_size_preset' ) ) {
 		}
 
 		$new_data = array(
-			'version'  => 2,
+			'version'  => 3,
 			'settings' => array(
 				'typography' => array(
 					'fontSizes' => $new_font_sizes,

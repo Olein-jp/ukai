@@ -9,7 +9,8 @@
 			"wideSize": "1180px"
 		},
 		"spacing": {
-			"units": [ "%", "px", "em", "rem", "vh", "vw" ]
+			"units": [ "%", "px", "em", "rem", "vh", "vw" ],
+			"defaultSpacingSizes": false
 		},
 		"typography": {
 			"fontFamilies": [

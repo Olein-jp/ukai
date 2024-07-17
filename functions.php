@@ -7,6 +7,9 @@
  * @since 1.0.0
  */
 
+define( 'UKAI_MIN_VIEWPORT_WIDTH', apply_filters( 'ukai_min_viewport_width', 25 ) );
+define( 'UKAI_MAX_VIEWPORT_WIDTH', apply_filters( 'ukai_max_viewport_width', 98.75 ) );
+
 if ( ! function_exists( 'ukai_enqueue_styles' ) ) {
 	/**
 	 * Enqueue global styles
@@ -57,3 +60,8 @@ if ( ! function_exists( 'ukai_enqueue_block_style' ) ) {
  * Required generate fluid typography font size preset and update theme.json
  */
 require get_template_directory() . '/inc/fluid-typography.php';
+
+/**
+ * Required generate fluid spacing preset and update theme.json
+ */
+require get_template_directory() . '/inc/fluid-spacing.php';
