@@ -1,5 +1,6 @@
 {
-  "themes": [ "." ],
+  "core": null,
+  "themes": ["."],
   "config": {
     "WP_DEBUG": true,
     "WP_DEVELOPMENT_MODE": "theme"
