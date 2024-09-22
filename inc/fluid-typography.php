@@ -82,7 +82,7 @@ if ( ! function_exists( 'ukai_generate_fluid_font_preset' ) ) {
 			'8xl',
 			'9xl',
 			'10xl',
-			'11xl'
+			'11xl',
 		];
 		$size_labels            = array_slice( $size_labels, 0, $fluid_typography_before_default + 1 + $fluid_typography_after_default );
 
