@@ -6,7 +6,7 @@
   "scripts": {
     "wp": "wp-env run --env-cwd=wp-content/themes/ukai cli wp",
     "export :db": "mkdir -p .export/sql && npm run wp db -- export .export/sql/local.sql",
-    "import": "wp-env run cli wp db import sql/db.sql",
+    "import": "npm run wp db -- import .export/sql/local.sql",
     "wp-env": "wp-env",
     "start": "wp-env start --update && wp-env run cli wp theme activate ukai",
     "stop": "wp-env stop",
