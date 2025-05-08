@@ -48,7 +48,7 @@ if ( ! function_exists( 'ukai_generate_fluid_font_preset' ) ) {
 		/**
 		 * Specify how many sizes to generate below and above the baseline font size.
 		 */
-		$fluid_typography_before_default = min( apply_filters( 'ukai_fluid_typography_before_default', 3 ), 3 );
+		$fluid_typography_before_default = min( apply_filters( 'ukai_fluid_typography_before_default', 2 ), 2 );
 		$fluid_typography_after_default  = min( apply_filters( 'ukai_fluid_typography_after_default', 10 ), 10 );
 
 		$min_font_size = [];
